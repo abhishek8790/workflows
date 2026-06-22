@@ -3,7 +3,7 @@ import urllib.parse
 from datetime import datetime
 
 NEWS_API_KEY = "3d9d1ca3fdd94186a02a173fa4b0793b"
-BUFFER_TOKEN = "bL56w7K_q2CPJBflczfOuHqv3ky_uP0IUL-Dy0bbsyl"  # <-- New token yahan paste karo
+BUFFER_TOKEN = "8Yau2zZcwB1uROnn-gRyP7LTziXVjzpqqGhnPAgTrO_"  # <-- New token yahan paste karo
 BUFFER_PROFILE_ID = "6a39918a5ab6d2f1065e1f21"  # <-- Instagram profile ID
 NICHE_KEYWORD = "artificial intelligence"
 
