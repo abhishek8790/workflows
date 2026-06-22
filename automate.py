@@ -3,6 +3,8 @@ import urllib.parse
 from datetime import datetime
 
 NEWS_API_KEY = "3d9d1ca3fdd94186a02a173fa4b0793b"
+BUFFER_TOKEN = "bL56w7K_q2CPJBflczfOuHqv3ky_uP0IUL-Dy0bbsyl"  # <-- New token yahan paste karo
+BUFFER_PROFILE_ID = "6a39918a5ab6d2f1065e1f21"  # <-- Instagram profile ID
 NICHE_KEYWORD = "artificial intelligence"
 
 def fetch_news():
@@ -11,11 +13,39 @@ def fetch_news():
 
 def generate_image_url(prompt):
     encoded = urllib.parse.quote(prompt)
-    return f"https://image.pollinations.ai/prompt/{encoded}?width=1200&height=630&nologo=true"
+    return f"https://image.pollinations.ai/prompt/{encoded}?width=1080&height=1080&nologo=true"
 
 def generate_post(title):
-    hashtags = "#AI #Tech #News #MachineLearning #Innovation"
-    return f"🚀 Breaking: {title}\n\n{hashtags}"
+    hashtags = "#AI #Tech #News #MachineLearning #Innovation #TechNews"
+    return f"🚀 {title}\n\n{hashtags}"
+
+def post_to_buffer(text, image_url):
+    headers = {
+        "Authorization": f"Bearer {BUFFER_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "text": text,
+        "media": {
+            "link": image_url
+        },
+        "profile_ids": [BUFFER_PROFILE_ID],
+        "now": True
+    }
+    
+    try:
+        r = requests.post(
+            "https://api.bufferapp.com/1/updates/create.json",
+            headers=headers,
+            json=data
+        )
+        print(f"Status Code: {r.status_code}")
+        print(f"Response: {r.text}")
+        return r.status_code == 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 def run():
     print("🔍 Fetching news...")
@@ -25,7 +55,7 @@ def run():
         return
     
     article = articles[0]
-    title = article['title']
+    title = article['title'][:100]  # Limit title length
     print(f"📰 Story: {title}")
     
     post = generate_post(title)
@@ -33,6 +63,13 @@ def run():
     
     print(f"\n🖼 Image: {image_url}")
     print(f"\n📝 Post:\n{post}")
+    
+    print("\n📤 Posting to Instagram via Buffer...")
+    if post_to_buffer(post, image_url):
+        print("✅ Successfully posted to Instagram!")
+    else:
+        print("❌ Failed to post")
+    
     print(f"\n✅ Generated at {datetime.now()}")
 
 if __name__ == "__main__":
